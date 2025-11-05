@@ -1,378 +1,175 @@
-'use client';
-import { useState } from 'react';
-import Header from './components/Header';
-import Navigation from './components/Navigation';
-import AdminGrid from './components/AdminGrid';
-import Modal from './components/Modal';
+'use client'
 
-export default function Home() {
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
+/* NEXT.JS 14+ (App Router) — Single-file example and full project snippets. This file contains the ready-to-paste app/page.jsx component plus a README-style collection of other files you should add to your project.
 
-  const toggleNav = () => setIsNavOpen(!isNavOpen);
-  const closeNav = () => setIsNavOpen(false);
+Instructions:
 
-  const handleAdminClick = (adminId) => {
-    setSelectedAdmin(adminId);
-  };
+1. Create a Next.js 14+ project (if you don't have one): npx create-next-app@latest my-site --experimental-app cd my-site
 
-  const closeModal = () => {
-    setSelectedAdmin(null);
-  };
 
-  return (
-    <>
-      <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <Navigation isOpen={isNavOpen} onClose={closeNav} />
-      
-      <main>
-        <h1>MONEY HEIST ADMINS</h1>
-        <AdminGrid onAdminClick={handleAdminClick} />
-      </main>
+2. Install Tailwind + PostCSS: npm install -D tailwindcss postcss autoprefixer npx tailwindcss init -p
 
-      <Modal 
-        isOpen={!!selectedAdmin} 
-        adminId={selectedAdmin} 
-        onClose={closeModal} 
-      />
 
-      <footer>© 2025 MONEY HEIST OFC — Admin Network</footer>
+3. Add the files below into your project (see filenames in each section).
 
-      <style jsx global>{`
-        /* Add all the CSS from your original file here */
-        /* I'm including the key parts for brevity */
-        
-        header {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 64px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 18px;
-          background: var(--glass);
-          backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(139,68,255,0.06);
-          z-index: 1200;
-        }
 
-        .brand {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          text-decoration: none;
-          color: var(--muted);
-          font-weight: 700;
-        }
+4. Start dev server: npm run dev
 
-        .brand .dot {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple));
-          box-shadow: 0 0 14px rgba(139,68,255,0.16);
-        }
 
-        .menu-btn {
-          width: 40px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          position: relative;
-        }
 
-        .menu-btn span {
-          position: absolute;
-          left: 8px;
-          right: 8px;
-          height: 3px;
-          background: #fff;
-          border-radius: 3px;
-          transition: all .28s;
-        }
+Files included below (copy each into your project):
 
-        .menu-btn span:nth-child(1) { top: 8px; }
-        .menu-btn span:nth-child(2) { top: 15px; }
-        .menu-btn span:nth-child(3) { top: 22px; }
+app/layout.jsx
 
-        .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .menu-btn.open span:nth-child(2) { opacity: 0; }
-        .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+app/page.jsx   (the main page component — paste this file's React code)
 
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.6);
-          backdrop-filter: blur(4px);
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity .28s;
-          z-index: 1100;
-        }
+styles/globals.css
 
-        .overlay.show {
-          opacity: 1;
-          visibility: visible;
-        }
+tailwind.config.js
 
-        .nav-panel {
-          position: fixed;
-          top: 0;
-          right: 0;
-          height: 100vh;
-          width: 300px;
-          transform: translateX(108%);
-          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-          border-left: 1px solid rgba(139,68,255,0.06);
-          backdrop-filter: blur(14px);
-          box-shadow: -20px 0 60px rgba(0,0,0,0.6);
-          padding: 84px 18px 24px;
-          transition: transform .36s cubic-bezier(.2,.9,.2,1);
-          z-index: 1150;
-        }
+postcss.config.js
 
-        .nav-panel.open {
-          transform: translateX(0);
-        }
+next.config.js
 
-        .nav-panel a {
-          display: block;
-          padding: 12px 14px;
-          margin: 8px 0;
-          border-radius: 12px;
-          color: var(--muted);
-          text-decoration: none;
-          font-weight: 600;
-          transition: background .18s, transform .18s;
-        }
+package.json (scripts excerpt)
 
-        .nav-panel a:hover {
-          background: linear-gradient(90deg, rgba(139,68,255,0.06), rgba(255,74,199,0.04));
-          transform: translateX(-6px);
-        }
 
-        main {
-          max-width: 1100px;
-          margin: 0 auto;
-          padding: 110px 18px 90px;
-          text-align: center;
-        }
+Notes:
 
-        h1 {
-          font-size: 28px;
-          margin-bottom: 26px;
-          color: var(--muted);
-          text-shadow: 0 0 18px rgba(139,68,255,0.04);
-        }
+Image optimization: this example uses plain <img> tags to avoid needing external domains config.
 
-        .admin-grid {
-          display: grid;
-          gap: 22px;
-          grid-template-columns: repeat(3, 1fr);
-          align-items: start;
-        }
+If you'd rather use next/image, add raw.githubusercontent.com to next.config.js images.domains */
 
-        @media (max-width: 1000px) {
-          .admin-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
 
-        @media (max-width: 600px) {
-          .admin-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
+// ------------------------- // app/page.jsx // -------------------------
 
-        @media (min-width: 1001px) {
-          .admin-grid .admin-card:nth-child(7) {
-            grid-column: 2;
-          }
-        }
+import React, { useEffect, useRef, useState } from 'react'; import Head from 'next/head';
 
-        @media (max-width: 1000px) {
-          .admin-grid .admin-card:nth-child(7) {
-            grid-column: 1 / span 2;
-            justify-self: center;
-            max-width: 360px;
-          }
-        }
+const ADMIN_DATA = { nipun: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/MR NIPUN OFC.png", name: "MR NIPUN OFC", info: <p>CONTACT : <a href="https://wa.me/+94757255903" target="_blank" rel="noopener noreferrer">+94 757255903</a></p> <p>AGE : 18</p><p>FROM : Sri Lanka</p> <br><h3>🌐 SOCIAL MEDIA</h3> <a href="https://whatsapp.com/channel/0029Vb9bLMqGJP8GmAHxUd02/3683" target="_blank" rel="noopener noreferrer">Whatsapp Channel</a> <a href="https://www.facebook.com/share/1KKrZV2NM8/" target="_blank" rel="noopener noreferrer">Facebook Account</a> <a href="https://www.facebook.com/share/17cgrxBQix/" target="_blank" rel="noopener noreferrer">Facebook Page</a> <a href="https://vm.tiktok.com/ZSHc9tLctfuKo-3zM0Z/" target="_blank" rel="noopener noreferrer">TikTok</a> <a href="https://youtube.com/@mrprofesormht?si=aT8XOonaZEj1YBdo" target="_blank" rel="noopener noreferrer">YouTube</a> <a href="https://www.instagram.com/mr_nipun_ofc/" target="_blank" rel="noopener noreferrer">Instagram</a> <a href="https://t.me/Profesor9999" target="_blank" rel="noopener noreferrer">Telegram</a> }, dila: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Dilan.png", name: "MR DILA OFC", info: "<p>Coming Soon...</p>" }, qusay: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Qusay.png", name: "MR QUSAY OFC", info: "<p>Coming Soon...</p>" }, sachiya: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Sachiya.png", name: "MR SACHIYA", info: "<p>Coming Soon...</p>" }, akeel: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Akeel.png", name: "MR AKEEL OFC", info: "<p>Coming Soon...</p>" }, heshan: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Heshan.png", name: "MR HESHAN OFC", info: "<p>Coming Soon...</p>" }, rukshan: { img: "https://raw.githubusercontent.com/maverick455456/ADMINS/refs/heads/main/ADMIN-DP/Rukshan.png", name: "MR RUKSHAN OFC", info: "<p>Coming Soon...</p>" } };
 
-        .admin-card {
-          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-          border: 1px solid rgba(139,68,255,0.06);
-          border-radius: 14px;
-          padding: 12px;
-          text-align: center;
-          cursor: pointer;
-          position: relative;
-          transition: transform .22s, box-shadow .22s;
-          box-shadow: 0 8px 26px rgba(0,0,0,0.55);
-        }
+export default function Page() { const [navOpen, setNavOpen] = useState(false); const [modalId, setModalId] = useState(null); const modalCloseRef = useRef(null);
 
-        .admin-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 50px rgba(139,68,255,0.08);
-        }
+useEffect(() => { function onKey(e) { if (e.key === 'Escape') { setNavOpen(false); setModalId(null); } } document.addEventListener('keydown', onKey); return () => document.removeEventListener('keydown', onKey); }, []);
 
-        .admin-name {
-          margin-top: 10px;
-          font-weight: 700;
-          color: var(--muted);
-          font-size: 14px;
-        }
+useEffect(() => { if (modalId && modalCloseRef.current) modalCloseRef.current.focus(); }, [modalId]);
 
-        .img-wrap {
-          width: 100%;
-          height: 140px;
-          border-radius: 12px;
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: visible;
-          margin: 0 auto;
-        }
+return ( <> <Head> <title>MONEY HEIST OFC ADMINS 🎭</title> <meta name="viewport" content="width=device-width, initial-scale=1" /> <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" /> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" /> </Head>
 
-        .img-wrap img {
-          width: 88%;
-          height: 86%;
-          object-fit: cover;
-          border-radius: 10px;
-          position: relative;
-          z-index: 5;
-          border: 3px solid rgba(0,0,0,0.2);
-        }
+<div className="min-h-screen bg-gradient-to-b from-[#120019] to-[#050007] text-white font-poppins">
+    <header className="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-4 bg-[rgba(255,255,255,0.04)] backdrop-blur-md border-b border-[rgba(139,68,255,0.06)] z-50">
+      <a className="flex items-center gap-3 font-bold text-[rgba(255,255,255,0.9)]" href="https://www.freebots.store" target="_blank" rel="noreferrer">
+        <span className="w-3 h-3 rounded-full bg-gradient-to-r from-[#ff4ac7] to-[#8b44ff] shadow-[0_0_14px_rgba(139,68,255,0.16)]" />
+        MONEY HEIST OFC ADMINS
+      </a>
 
-        .img-wrap .ring {
-          position: absolute;
-          inset: -6px;
-          border-radius: 14px;
-          z-index: 3;
-          pointer-events: none;
-          background: conic-gradient(from 0deg, rgba(255,47,109,0.95), rgba(255,47,109,0.0) 30%, rgba(255,47,109,0.95) 50%, rgba(255,47,109,0.0) 80%, rgba(255,47,109,0.95));
-          filter: blur(6px);
-          opacity: 0.22;
-          animation: spinSlow 5.5s linear infinite;
-          mix-blend-mode: screen;
-        }
+      <button aria-label="menu" title="menu" className={`w-10 h-8 relative ${navOpen ? 'open' : ''}`} onClick={() => setNavOpen(prev => !prev)}>
+        <span className="block absolute left-2 right-2 h-0.5 bg-white rounded transition-all" style={{ top: 8 }} />
+        <span className="block absolute left-2 right-2 h-0.5 bg-white rounded transition-all" style={{ top: 16 }} />
+        <span className="block absolute left-2 right-2 h-0.5 bg-white rounded transition-all" style={{ top: 24 }} />
+      </button>
+    </header>
 
-        @keyframes spinSlow {
-          from { transform: rotate(0); }
-          to { transform: rotate(360deg); }
-        }
+    {/* overlay & nav panel */}
+    <div className={`${navOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity z-40`} onClick={() => setNavOpen(false)} />
 
-        .admin-card:hover .img-wrap .ring {
-          opacity: 0.6;
-          filter: blur(9px);
-        }
+    <nav className={`${navOpen ? 'translate-x-0' : 'translate-x-full'} fixed top-0 right-0 h-full w-72 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))] border-l border-[rgba(139,68,255,0.06)] p-20 pt-24 transition-transform z-50`}>
+      {[
+        ['Loging', 'https://www.freebots.store/r/NIPUNO6D43'],
+        ['Home', 'https://www.freebots.store'],
+        ['Service', 'https://www.freebots.store/services'],
+        ['FAQ', 'https://www.freebots.store/faq'],
+        ['Team', 'https://www.freebots.store/team'],
+        ['About', 'https://www.freebots.store/about'],
+        ['Contact', 'https://www.freebots.store/contact'],
+        ['Privacy', 'https://www.freebots.store/privacy'],
+        ['Terms', 'https://www.freebots.store/terms']
+      ].map(([label, url]) => (
+        <button key={label} onClick={() => { setNavOpen(false); setTimeout(() => window.location.href = url, 240); }} className="w-full text-left py-3 px-4 mb-3 rounded-lg font-semibold hover:bg-[linear-gradient(90deg,rgba(139,68,255,0.06),rgba(255,74,199,0.04))]">
+          ❖ {label}
+        </button>
+      ))}
+    </nav>
 
-        .modal {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.66);
-          backdrop-filter: blur(8px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity .22s;
-          z-index: 1300;
-        }
+    <main className="max-w-6xl mx-auto px-4 pt-28 pb-24 text-center">
+      <h1 className="text-2xl mb-6 text-[rgba(255,255,255,0.92)]">MONEY HEIST ADMINS</h1>
 
-        .modal.show {
-          opacity: 1;
-          visibility: visible;
-        }
+      <section className="grid gap-6 grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
+        {['nipun','dila','qusay','sachiya','akeel','heshan','rukshan'].map((id, idx) => {
+          const admin = ADMIN_DATA[id];
+          return (
+            <article key={id} className={`bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))] border border-[rgba(139,68,255,0.06)] rounded-lg p-3 text-center shadow-md hover:translate-y-[-6px] transition-transform`} onClick={() => setModalId(id)} tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setModalId(id); }}>
+              <div className="relative w-full h-36 rounded-md flex items-center justify-center overflow-visible mx-auto">
+                <div className="absolute inset-[-6px] rounded-xl pointer-events-none bg-[conic-gradient(from_0deg,rgba(255,47,109,0.95),rgba(255,47,109,0.0)_30%,rgba(255,47,109,0.95)_50%,rgba(255,47,109,0.0)_80%,rgba(255,47,109,0.95))] filter blur-sm opacity-20 animate-spin-slow mix-blend-screen" />
+                <img src={admin.img} alt={admin.name} className="w-11/12 h-5/6 object-cover rounded-lg border-[3px] border-black/20 relative z-10" onError={(e)=>{ e.currentTarget.style.opacity = '0.7'; }} />
+              </div>
+              <div className="mt-3 font-semibold text-[rgba(255,255,255,0.9)]">{admin.name}</div>
+            </article>
+          );
+        })}
+      </section>
+    </main>
 
-        .modal-box {
-          width: 92%;
-          max-width: 520px;
-          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-          border-radius: 12px;
-          padding: 18px;
-          border: 1px solid rgba(139,68,255,0.06);
-          backdrop-filter: blur(12px);
-          box-shadow: 0 30px 60px rgba(10,0,30,0.6);
-          animation: popIn .28s ease;
-          text-align: center;
-          color: var(--muted);
-          position: relative;
-        }
+    <footer className="text-center py-8 text-[rgba(255,255,255,0.6)]">© 2025 MONEY HEIST OFC — Admin Network</footer>
 
-        @keyframes popIn {
-          from {
-            opacity: 0;
-            transform: translateY(12px) scale(.98);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
+    {/* modal */}
+    <div className={`${modalId ? 'opacity-100 visible' : 'opacity-0 invisible'} fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 transition-all`} onClick={() => setModalId(null)}>
+      {modalId && (
+        <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))] border border-[rgba(139,68,255,0.06)] rounded-lg p-6 w-[92%] max-w-xl text-center relative" onClick={(e)=>e.stopPropagation()}>
+          <button ref={modalCloseRef} className="absolute top-3 right-3 w-9 h-9 rounded-md border border-[rgba(255,255,255,0.04)]" onClick={() => setModalId(null)}>✖</button>
+          <img src={ADMIN_DATA[modalId].img} alt={ADMIN_DATA[modalId].name} className="w-28 h-28 rounded-full object-cover mx-auto border-[4px] border-[rgba(255,255,255,0.03)] shadow-lg" />
+          <h2 className="mt-3 text-lg">{ADMIN_DATA[modalId].name}</h2>
+          <div className="mt-2 text-sm text-[rgba(255,255,255,0.9)]" dangerouslySetInnerHTML={{ __html: ADMIN_DATA[modalId].info }} />
+          <div className="mt-4">
+            <a className="inline-block px-4 py-2 rounded-md font-bold bg-gradient-to-r from-[#8b44ff] to-[#ff4ac7] text-white" href="#" onClick={(e)=>e.preventDefault()}>Contact</a>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
 
-        .modal-box img {
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 4px solid rgba(255,255,255,0.03);
-          box-shadow: 0 12px 40px rgba(139,68,255,0.08);
-        }
+  <style>{`
+    @keyframes spin-slow { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    .animate-spin-slow { animation: spin-slow 5.5s linear infinite }
+    :root { --poppins: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial }
+    .font-poppins { font-family: var(--poppins) }
+  `}</style>
+</>
 
-        .modal-box h2 {
-          margin-top: 12px;
-          font-size: 20px;
-        }
+); }
 
-        .modal-box p {
-          margin: 8px 0;
-          color: rgba(255,255,255,0.9);
-          font-size: 14px;
-        }
+// ------------------------- // app/layout.jsx // ------------------------- // Add this file to app/layout.jsx to provide <html> & <body> wrapper and import globals.
 
-        .modal-box .social a {
-          display: block;
-          margin: 6px 0;
-          padding: 9px;
-          border-radius: 10px;
-          text-decoration: none;
-          color: #fff;
-          background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
-          font-weight: 700;
-        }
+/* import './globals.css'
 
-        .modal-close {
-          position: absolute;
-          top: 12px;
-          right: 12px;
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.04);
-          color: var(--muted);
-          width: 36px;
-          height: 36px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 16px;
-        }
+export const metadata = { title: 'MONEY HEIST OFC ADMINS', description: 'Admin network page', }
 
-        .modal-close:hover {
-          background: rgba(139,68,255,0.06);
-        }
+export default function RootLayout({ children }) { return ( <html lang="en"> <body>{children}</body> </html> ) } */
 
-        footer {
-          padding: 28px 12px;
-          text-align: center;
-          color: rgba(255,255,255,0.6);
-          font-size: 13px;
-          margin-top: 20px;
-        }
-      `}</style>
-    </>
-  );
-          }
+// ------------------------- // styles/globals.css // ------------------------- /* @tailwind base; @tailwind components; @tailwind utilities;
+
+:root{ --bg-dark:#050007; --bg-mid:#120019 } html,body,#root{height:100%} body{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial} */
+
+// ------------------------- // tailwind.config.js // ------------------------- /* module.exports = { content: [ './app//*.{js,jsx,ts,tsx}', './pages//.{js,jsx,ts,tsx}', './components/**/.{js,jsx,ts,tsx}' ], theme: { extend: {}, }, plugins: [], } */
+
+// ------------------------- // postcss.config.js // ------------------------- /* module.exports = { plugins: { tailwindcss: {}, autoprefixer: {}, }, } */
+
+// ------------------------- // next.config.js (optional image domain) // ------------------------- /* const nextConfig = { reactStrictMode: true, images: { domains: ['raw.githubusercontent.com'], }, } module.exports = nextConfig */
+
+// ------------------------- // package.json (scripts excerpt) // ------------------------- /* "scripts": { "dev": "next dev", "build": "next build", "start": "next start" } */
+
+// ------------------------- // Quick checklist for a working local setup // ------------------------- /*
+
+1. create-next-app (or use existing Next.js 14+ project)
+
+
+2. add app/layout.jsx and app/page.jsx (this file's page code)
+
+
+3. add styles/globals.css; import it in layout.jsx
+
+
+4. install tailwind and run dev
+
+
+
+If you prefer NOT to use Tailwind, you can keep the inline styles and the page will work as-is in app/page.jsx. */
